@@ -1,4 +1,5 @@
 #include "calculatedirectory.h"
+#include "calculatordirsize.h"
 #include <QCoreApplication>
 #include <QDir>
 #include <cmath>
@@ -11,19 +12,19 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     std::string string;
-
+    CalculatorDirSize* calculator = new CalculatorDirSize(new CalculateFolderSize);
     QMap<QString, qint64> map;
-    CalculateDirectory* calc;
+
     bool flag = 0;
     while (true) {
         std::cout << "Select strategy: 'folder' , 'type' " << std::endl;
         std::cin >> string;
         if (string == "folder") {
-            calc = new CalculateFolderSize;
+            calculator->setCalculate(new CalculateFolderSize);
             flag = 1;
         }
         if (string == "type") {
-            calc = new CalculateTypeSize;
+            calculator->setCalculate(new CalculateTypeSize);
             flag = 1;
         }
 
@@ -31,11 +32,12 @@ int main(int argc, char *argv[])
             flag = 0;
             std::cout << "Enter directory" << std::endl;
             std::cin >> string;
-            map = calc->calculate(string.c_str());
+            map = calculator->calculate(string.c_str());
 
             qint64 size = 0;
             foreach (const qint64 value, map.values())
                 size += value;
+
             qDebug() << "Map > " << map.values();
             qDebug() << Qt::endl;
             for (auto i = map.cbegin(), end = map.cend(); i != end; ++i)

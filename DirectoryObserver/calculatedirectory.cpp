@@ -39,7 +39,7 @@ QMap<QString, qint64> CalculateFolderSize::calculate(QString directory, QString 
     if (!level) {
         QFileInfo file(directory);
         if (file.isFile()) {
-                map.insert(file.suffix(), file.size());
+                map.insert("Current Folder", file.size());
                 return map;
         }
         mapCatalog = "Current Folder";
@@ -67,5 +67,7 @@ QMap<QString, qint64> CalculateFolderSize::calculate(QString directory, QString 
 
     return map;
 }
+
+
 
 
