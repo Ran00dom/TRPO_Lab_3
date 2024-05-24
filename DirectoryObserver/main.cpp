@@ -42,10 +42,17 @@ int main(int argc, char *argv[])
             qDebug() << Qt::endl;
             for (auto i = map.cbegin(), end = map.cend(); i != end; ++i)
             {
-                if ((i.value() * 100000 / size) >= 10)
-                    qDebug() << (i.key()) << ": " <<  round(((double)i.value() * 10000 / size))/100 << "%";
+                if (size != 0) {
+                    if ((i.value() * 100000 / size) >= 10)
+                        qDebug() << (i.key()) << ": " <<  round(((double)i.value() * 10000 / size))/100 << "%";
+                    else
+                        if (i.value() != 0)
+                            qDebug() << (i.key()) << ": " <<  " < 0.01" << "%";
+                        else
+                            qDebug() << (i.key()) << ": " <<  " 0 ";
+                }
                 else
-                    qDebug() << (i.key()) << ": " <<  " < 0.01" << "%";
+                     qDebug() << (i.key()) << ": " <<  " 0 ";
             }
             qDebug() << Qt::endl;
         }
