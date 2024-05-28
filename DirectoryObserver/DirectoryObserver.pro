@@ -11,7 +11,8 @@ CONFIG += c++17
 SOURCES += \
         calculatedirectory.cpp \
         fileexplorermodel.cpp \
-        main.cpp
+        main.cpp \
+        window.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -22,4 +23,5 @@ HEADERS += \
     calculatedirectory.h \
     calculatordirsize.h \
     fileexplorermodel.h \
+    window.h \
     СalculatorDirSize.h

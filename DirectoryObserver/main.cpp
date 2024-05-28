@@ -1,7 +1,8 @@
 #include "calculatedirectory.h"
 #include "calculatordirsize.h"
 #include "fileexplorermodel.h"
-#include <QCoreApplication>
+#include "window.h"
+#include <QApplication>
 #include <QDir>
 #include <cmath>
 #include <iostream>
@@ -10,9 +11,12 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-
+    QApplication app(argc, argv);
+    Window win{};
+    win.show();
+/*
     FileExplorerModel model = new FileExplorerModel();
+
     std::string string;
     CalculatorDirSize* calculator = new CalculatorDirSize(new CalculateFolderSize);
     QMap<QString, qint64> map;
@@ -59,5 +63,6 @@ int main(int argc, char *argv[])
             qDebug() << Qt::endl;
         }
     }
-    return a.exec();
+*/
+    return app.exec();
 }

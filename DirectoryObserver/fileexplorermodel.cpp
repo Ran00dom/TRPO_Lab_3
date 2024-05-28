@@ -1,4 +1,5 @@
 #include "fileexplorermodel.h"
+#include "qdebug.h"
 
 int FileExplorerModel::rowCounter(const QModelIndex &parent) const {
     Q_UNUSED(parent)
@@ -45,6 +46,10 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+
 void FileExplorerModel::updateModel() {
-    sizeMap = calculator.calculate(rootPath());
+    sizeMap = calculator.calculate(this->rootPath());
+    setRootPath(this->rootPath());
+    qDebug() << rootPath();
+    //emit update();
 }
