@@ -1,5 +1,6 @@
 #include "calculatedirectory.h"
 #include "calculatordirsize.h"
+#include "fileexplorermodel.h"
 #include <QCoreApplication>
 #include <QDir>
 #include <cmath>
@@ -11,6 +12,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    FileExplorerModel model = new FileExplorerModel();
     std::string string;
     CalculatorDirSize* calculator = new CalculatorDirSize(new CalculateFolderSize);
     QMap<QString, qint64> map;

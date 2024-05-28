@@ -44,3 +44,7 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
+
+void FileExplorerModel::updateModel() {
+    sizeMap = calculator.calculate(rootPath());
+}
