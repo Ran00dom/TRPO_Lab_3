@@ -13,6 +13,11 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
+    enum HeaderName
+    {
+        NAME = 0,
+        SIZE
+    };
     QMap<QString, qint64> sizeMap;
 };
 
