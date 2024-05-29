@@ -6,32 +6,36 @@ Window::Window(QWidget *parent): QWidget{parent}
     table = new QTableView(this);
     modelTable = new FileExplorerModel(this);
     modelTree = new QFileSystemModel(this);
-    topMenu = new QFrame(this);
-    calculate = new QPushButton("Calculate",this);
+    topMenuFrame = new QFrame(this);
+    calculateButton = new QPushButton("Calculate",this);
+    strategyCB = new QComboBox(this);
 
     modelTree->setRootPath(QDir::homePath());
     tree->setModel(modelTree);
     table->setModel(modelTable);
 
-    topMenu->setFrameShadow(QFrame::Raised);
-    topMenu->setFrameShape(QFrame::Panel);
+    strategyCB->addItem("Directory Size", 0);
+    strategyCB->addItem("File Type Size", 1);
+    topMenuFrame->setFrameShadow(QFrame::Raised);
+    topMenuFrame->setFrameShape(QFrame::Panel);
 
     QHBoxLayout *hLayout1 = new QHBoxLayout();
     hLayout1->addWidget(tree);
     hLayout1->addWidget(table);
 
-    QHBoxLayout *hLayout2 = new QHBoxLayout(topMenu);
-    hLayout2->addWidget(calculate);
+    QHBoxLayout *hLayout2 = new QHBoxLayout(topMenuFrame);
+    hLayout2->addWidget(calculateButton);
+    hLayout2->addWidget(strategyCB);
 
     QVBoxLayout *vLayout1 = new QVBoxLayout(this);
-    vLayout1->addWidget(topMenu);
+    vLayout1->addWidget(topMenuFrame);
     vLayout1->addLayout(hLayout1);
 
     tree->show();
     table->show();
 
     connect(tree, &QTableView::pressed, this, &Window::userSelectDir);
-    connect(calculate, &QPushButton::pressed, modelTable , &FileExplorerModel::updateModel);
+    connect(calculateButton, &QPushButton::pressed, modelTable , &FileExplorerModel::updateModel);
 }
 
 void Window::userSelectDir(const QModelIndex &index){

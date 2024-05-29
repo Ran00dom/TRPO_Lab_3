@@ -8,9 +8,8 @@ class FileExplorerModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    FileExplorerModel(QObject* parent = nullptr, QMap<QString, qint64> map = QMap<QString, qint64>() ):QAbstractTableModel(parent),sizeMap(map),calculator(new CalculateTypeSize()) {
-        //this->connect(this,&FileExplorerModel::rootPathChanged, this, &FileExplorerModel::updateModel);
-    }
+    FileExplorerModel(QObject* parent = nullptr);
+    ~FileExplorerModel();
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -18,6 +17,7 @@ public:
     void setNewPath(const QString& newPath) {path = newPath;}
 public slots:
     void updateModel();
+    void selectStrategy(unsigned int strategy);
 
 
 private:
@@ -26,8 +26,14 @@ private:
         NAME = 0,
         SIZE
     };
+    enum StrategyType
+    {
+        DIR_SIZE = 0,
+        TYPE_SIZE
+    };
     QMap<QString, qint64> sizeMap;
-    CalculatorDirSize calculator;
+    CalculatorDirSize* calculator;
+    CalculateDirectory* strategyCalc[TYPE_SIZE + 1];
     QString path;
 };
 

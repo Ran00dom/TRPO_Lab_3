@@ -1,6 +1,18 @@
 #include "fileexplorermodel.h"
 #include "qdebug.h"
 
+FileExplorerModel::FileExplorerModel(QObject* parent):QAbstractTableModel(parent),sizeMap(QMap<QString,qint64>()) {
+    strategyCalc[0] = new CalculateFolderSize();
+    strategyCalc[1] = new CalculateTypeSize();
+    calculator = new CalculatorDirSize(strategyCalc[0]);
+}
+
+FileExplorerModel::~FileExplorerModel(){
+    delete calculator;
+    delete strategyCalc[0];
+    delete strategyCalc[1];
+}
+
 int FileExplorerModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent)
     return sizeMap.count();
@@ -47,8 +59,11 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
 }
 
 void FileExplorerModel::updateModel() {
-    sizeMap = calculator.calculate(path);
+    sizeMap = calculator->calculate(path);
     qDebug() << sizeMap;
     emit layoutChanged();
 }
-
+void FileExplorerModel::selectStrategy(unsigned int strategy) {
+    if (strategy <= TYPE_SIZE)
+        calculator->setCalculate(strategyCalc[strategy]);
+}
