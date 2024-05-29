@@ -7,6 +7,7 @@
 #include <QTableView>
 #include <QHBoxLayout>
 #include <QPushButton>
+
 class Window : public QWidget
 {
     Q_OBJECT
@@ -21,9 +22,10 @@ private:
     FileExplorerModel *modelTable;
     QFileSystemModel *modelTree;
     QPushButton* calculate;
+    QFrame* topMenu;
+
 public slots:
     void userSelectDir(const QModelIndex &index);
-
 };
 
 #endif // WINDOW_H

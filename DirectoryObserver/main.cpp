@@ -1,19 +1,15 @@
-#include "calculatedirectory.h"
-#include "calculatordirsize.h"
-#include "fileexplorermodel.h"
 #include "window.h"
 #include <QApplication>
-#include <QDir>
 #include <cmath>
 #include <iostream>
 #include <QDebug>
-#include <QMap>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Window win{};
+    Window win;
     win.show();
+
 /*
     FileExplorerModel model = new FileExplorerModel();
 

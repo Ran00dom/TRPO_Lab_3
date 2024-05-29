@@ -1,14 +1,14 @@
 #include "fileexplorermodel.h"
 #include "qdebug.h"
 
-int FileExplorerModel::rowCounter(const QModelIndex &parent) const {
+int FileExplorerModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent)
     return sizeMap.count();
 }
 
 int FileExplorerModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent)
-    return 2;
+    return SIZE + 1;
 }
 
 QVariant FileExplorerModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -31,25 +31,24 @@ QVariant FileExplorerModel::headerData(int section, Qt::Orientation orientation,
 
 QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() ||
-        sizeMap.count() <= index.row() || (role != Qt::DisplayRole && role != Qt::EditRole))
+
+    if (!index.isValid() || sizeMap.count() < index.row() || (role != Qt::DisplayRole && role != Qt::EditRole))
     {
-        return QVariant();
+       return QVariant();
     }
 
     switch (index.column()) {
     case NAME:
-        return sizeMap.key(index.row());
+        return sizeMap.keys().at(index.row());
     case SIZE:
-        return sizeMap.value(sizeMap.key(index.row()));
+        return QString::number(sizeMap.values().at(index.row()));
     }
     return QVariant();
 }
 
-
 void FileExplorerModel::updateModel() {
-    sizeMap = calculator.calculate(this->rootPath());
-    setRootPath(this->rootPath());
-    qDebug() << rootPath();
-    //emit update();
+    sizeMap = calculator.calculate(path);
+    qDebug() << sizeMap;
+    emit layoutChanged();
 }
+

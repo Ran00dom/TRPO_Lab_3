@@ -6,31 +6,34 @@ Window::Window(QWidget *parent): QWidget{parent}
     table = new QTableView(this);
     modelTable = new FileExplorerModel(this);
     modelTree = new QFileSystemModel(this);
+    topMenu = new QFrame(this);
     calculate = new QPushButton("Calculate",this);
 
     modelTree->setRootPath(QDir::homePath());
-    //modelTable->setRootPath(QDir::homePath());
     tree->setModel(modelTree);
-
-    //tree->setRootIndex(file->index(QDir::currentPath()));
     table->setModel(modelTable);
 
-    QHBoxLayout *hLayout1 = new QHBoxLayout(this);
+    topMenu->setFrameShadow(QFrame::Raised);
+    topMenu->setFrameShape(QFrame::Panel);
+
+    QHBoxLayout *hLayout1 = new QHBoxLayout();
     hLayout1->addWidget(tree);
     hLayout1->addWidget(table);
-    hLayout1->addStretch();
+
+    QHBoxLayout *hLayout2 = new QHBoxLayout(topMenu);
+    hLayout2->addWidget(calculate);
+
+    QVBoxLayout *vLayout1 = new QVBoxLayout(this);
+    vLayout1->addWidget(topMenu);
+    vLayout1->addLayout(hLayout1);
+
     tree->show();
     table->show();
 
-    QVBoxLayout *vLayout1 = new QVBoxLayout(this);
-    vLayout1->addWidget(calculate);
-    vLayout1->addLayout(hLayout1);
-    vLayout1->addStretch();
     connect(tree, &QTableView::pressed, this, &Window::userSelectDir);
     connect(calculate, &QPushButton::pressed, modelTable , &FileExplorerModel::updateModel);
-   // connect(modelTable , &FileExplorerModel::update, table , &QTableView::updateGeometry);
 }
 
 void Window::userSelectDir(const QModelIndex &index){
-    modelTable->setRootPath(modelTree->filePath(index));
+    modelTable->setNewPath(modelTree->filePath(index));
 }
