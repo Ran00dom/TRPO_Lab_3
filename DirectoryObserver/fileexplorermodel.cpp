@@ -63,7 +63,8 @@ void FileExplorerModel::updateModel() {
     qDebug() << sizeMap;
     emit layoutChanged();
 }
-void FileExplorerModel::selectStrategy(unsigned int strategy) {
-    if (strategy <= TYPE_SIZE)
+void FileExplorerModel::selectStrategy(int strategy) {
+    qDebug() << strategy;
+    if (strategy <= TYPE_SIZE && strategy > -1)
         calculator->setCalculate(strategyCalc[strategy]);
 }

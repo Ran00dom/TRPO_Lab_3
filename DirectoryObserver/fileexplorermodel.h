@@ -17,8 +17,7 @@ public:
     void setNewPath(const QString& newPath) {path = newPath;}
 public slots:
     void updateModel();
-    void selectStrategy(unsigned int strategy);
-
+    void selectStrategy(int strategy);
 
 private:
     enum HeaderName

@@ -36,6 +36,7 @@ Window::Window(QWidget *parent): QWidget{parent}
 
     connect(tree, &QTableView::pressed, this, &Window::userSelectDir);
     connect(calculateButton, &QPushButton::pressed, modelTable , &FileExplorerModel::updateModel);
+    connect(strategyCB, qOverload<int>(&QComboBox::currentIndexChanged), modelTable, &FileExplorerModel::selectStrategy);
 }
 
 void Window::userSelectDir(const QModelIndex &index){
