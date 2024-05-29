@@ -1,5 +1,6 @@
 #include "fileexplorermodel.h"
 #include "qdebug.h"
+#include <cmath>
 
 FileExplorerModel::FileExplorerModel(QObject* parent):QAbstractTableModel(parent),sizeMap(QMap<QString,qint64>()) {
     strategyCalc[0] = new CalculateFolderSize();
@@ -57,7 +58,13 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
     case SIZE:
         return QString::number(sizeMap.values().at(index.row()));
     case PERCENT: {
-            return QString::number(sizeMap.values().at(index.row()));
+        if ((sizeMap.values().at(index.row()) * 100000 / size) >= 10)
+                return QString::number(round(((double)sizeMap.values().at(index.row()) * 10000 / size))/100)  + "%";
+        else
+            if (sizeMap.values().at(index.row()) != 0)
+                return " < 0.01%";
+            else
+               return " * "; // вывод если нет размера
         }
     }
     return QVariant();
@@ -70,20 +77,24 @@ void FileExplorerModel::updateModel() {
     size = 0;
     foreach (const qint64 value, sizeMap.values())
         size += value;
-
-    if (strategy == TYPE_SIZE && sizeMap.count() > 0) {
+    // выделение типов в группу other
+    if (strategy == TYPE_SIZE && sizeMap.count() > 0) { // проверяем стратегию
         qint64 otherSize = 0;
-        foreach (const QString key, sizeMap.keys()) {
-            if (sizeMap.find(key).value() == 0 || (sizeMap.find(key).value() * 100000 / size) < 10) {
+        QStringList otherKey; // лист для ключей на удаление
+        foreach (const QString& key, sizeMap.keys()) {
+            if (sizeMap.find(key).value() == 0 || (sizeMap.find(key).value() * 100000 / size) < 10) { // условие для other
                 otherSize += sizeMap.find(key).value();
-                sizeMap.remove(key);
+                otherKey.append(key); // добавляем ключь на удаление
             }
         }
-        if (otherSize > 0)
+        if (otherSize > 0 && otherKey.count() > 1) { // если есть больше одного ключа в категории other
             sizeMap.insert("other", otherSize);
+            foreach (const QString& key, otherKey) // удаление всех ключей из категории other
+                sizeMap.remove(key);
+        }
     }
 
-    emit layoutChanged();
+    emit layoutChanged(); // обновить представление
 }
 void FileExplorerModel::selectStrategy(int strategy) {
     qDebug() << "Strategy changed " << strategy;
