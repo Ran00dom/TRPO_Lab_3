@@ -88,9 +88,9 @@ void FileExplorerModel::updateModel() {
             }
         }
         if (otherSize > 0 && otherKey.count() > 1) { // если есть больше одного ключа в категории other
-            sizeMap.insert("other", otherSize);
             foreach (const QString& key, otherKey) // удаление всех ключей из категории other
                 sizeMap.remove(key);
+            sizeMap.insert(sizeMap.constEnd(),"other", otherSize);
         }
     }
 
