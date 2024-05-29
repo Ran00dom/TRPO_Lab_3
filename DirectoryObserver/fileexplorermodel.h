@@ -23,16 +23,21 @@ private:
     enum HeaderName
     {
         NAME = 0,
-        SIZE
+        SIZE,
+        PERCENT,
+        LAST_HEAD
     };
     enum StrategyType
     {
         DIR_SIZE = 0,
-        TYPE_SIZE
+        TYPE_SIZE,
+        LAST_STRATEGY
     };
     QMap<QString, qint64> sizeMap;
     CalculatorDirSize* calculator;
-    CalculateDirectory* strategyCalc[TYPE_SIZE + 1];
+    CalculateDirectory* strategyCalc[LAST_STRATEGY];
+    StrategyType strategy;
+    qint64 size;
     QString path;
 };
 
