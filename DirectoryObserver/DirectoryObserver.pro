@@ -1,6 +1,8 @@
-QT += core gui
+QT       += core gui
 
-CONFIG += c++17 cmdline
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -8,7 +10,9 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         calculatedirectory.cpp \
-        main.cpp
+        fileexplorermodel.cpp \
+        main.cpp \
+        window.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -18,4 +22,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     calculatedirectory.h \
     calculatordirsize.h \
+    fileexplorermodel.h \
+    window.h \
     СalculatorDirSize.h

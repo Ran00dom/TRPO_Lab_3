@@ -2,6 +2,7 @@
 
 QMap<QString, qint64> CalculateTypeSize::calculate(QString directory, QString mapCatalog, int level)
 {
+    Q_UNUSED(mapCatalog)
     QMap<QString, qint64> map;
 
     if (!level) {
