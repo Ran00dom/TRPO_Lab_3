@@ -10,8 +10,9 @@ FileExplorerModel::FileExplorerModel(QObject* parent):QAbstractTableModel(parent
 
 FileExplorerModel::~FileExplorerModel(){
     delete calculator;
-    delete strategyCalc[0];
-    delete strategyCalc[1];
+    for (int i = 0; i < LAST_STRATEGY; i++)
+        delete strategyCalc[i];
+
 }
 
 int FileExplorerModel::rowCount(const QModelIndex &parent) const {
@@ -71,6 +72,10 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+void FileExplorerModel::setNewPath(const QString& newPath) {
+    path = newPath;
+}
+
 void FileExplorerModel::updateModel() {
     sizeMap = calculator->calculate(path);
     qDebug() << sizeMap;
@@ -97,6 +102,7 @@ void FileExplorerModel::updateModel() {
 
     emit layoutChanged(); // обновить представление
 }
+
 void FileExplorerModel::selectStrategy(int strategy) {
     qDebug() << "Strategy changed " << strategy;
     if (strategy < LAST_STRATEGY && strategy > -1) {
