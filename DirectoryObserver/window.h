@@ -9,6 +9,10 @@
 #include <QPushButton>
 #include <QComboBox>
 
+#include <QtCharts>
+#include <QStackedBarSeries>
+
+
 class Window : public QWidget
 {
     Q_OBJECT
@@ -25,6 +29,10 @@ private:
     QPushButton* calculateButton;
     QFrame* topMenuFrame;
     QComboBox* strategyCB;
+
+    QComboBox* viewDataCB;
+
+
 public slots:
     void userSelectDir(const QModelIndex &index);
 };

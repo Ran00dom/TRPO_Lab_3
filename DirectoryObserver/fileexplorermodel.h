@@ -33,12 +33,13 @@ private:
         TYPE_SIZE,
         LAST_STRATEGY
     };
-    QMap<QString, qint64> sizeMap;
+
     CalculatorDirSize* calculator;
     CalculateDirectory* strategyCalc[LAST_STRATEGY];
     StrategyType strategy;
     qint64 size;
     QString path;
+    QMap<QString, qint64> sizeMap;
 };
 
 #endif // FILEEXPLORERMODEL_H

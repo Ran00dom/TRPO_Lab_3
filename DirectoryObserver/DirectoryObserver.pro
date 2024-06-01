@@ -1,4 +1,5 @@
 QT       += core gui
+QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,9 +10,11 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        adapter.cpp \
         calculatedirectory.cpp \
         fileexplorermodel.cpp \
         main.cpp \
+        samplechart.cpp \
         window.cpp
 
 # Default rules for deployment.
@@ -20,8 +23,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    adapter.h \
     calculatedirectory.h \
     calculatordirsize.h \
     fileexplorermodel.h \
+    samplechart.h \
     window.h \
     СalculatorDirSize.h

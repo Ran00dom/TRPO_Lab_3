@@ -59,13 +59,13 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
     case SIZE:
         return QString::number(sizeMap.values().at(index.row()));
     case PERCENT: {
-        if (size != 0)
+        if (size != 0) {
             if ((sizeMap.values().at(index.row()) * 100000 / size) >= 10)
                 return QString::number((round(((double)sizeMap.values().at(index.row()) * 10000 / size) - 0.5)/100))  + "%";
             else
                 if (sizeMap.values().at(index.row()) != 0)
                     return " < 0.01%";
-
+        }
         return " * "; // вывод если нет размера
     }
     }
