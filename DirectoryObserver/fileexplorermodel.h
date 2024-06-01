@@ -1,7 +1,6 @@
 #ifndef FILEEXPLORERMODEL_H
 #define FILEEXPLORERMODEL_H
 
-#include "calculatordirsize.h"
 #include <QFileSystemModel>
 
 class FileExplorerModel : public QAbstractTableModel
@@ -14,10 +13,9 @@ public:
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    void setNewPath(const QString& newPath);
+
 public slots:
-    void updateModel();
-    void selectStrategy(int strategy);
+    virtual void updateModel(QMap<QString, qint64>);
 
 private:
     enum HeaderName
@@ -27,18 +25,8 @@ private:
         PERCENT,
         LAST_HEAD
     };
-    enum StrategyType
-    {
-        DIR_SIZE = 0,
-        TYPE_SIZE,
-        LAST_STRATEGY
-    };
 
-    CalculatorDirSize* calculator;
-    CalculateDirectory* strategyCalc[LAST_STRATEGY];
-    StrategyType strategy;
     qint64 size;
-    QString path;
     QMap<QString, qint64> sizeMap;
 };
 

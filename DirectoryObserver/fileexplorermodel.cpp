@@ -3,16 +3,9 @@
 #include <cmath>
 
 FileExplorerModel::FileExplorerModel(QObject* parent):QAbstractTableModel(parent),sizeMap(QMap<QString,qint64>()) {
-    strategyCalc[0] = new CalculateFolderSize();
-    strategyCalc[1] = new CalculateTypeSize();
-    calculator = new CalculatorDirSize(strategyCalc[0]);
 }
 
 FileExplorerModel::~FileExplorerModel(){
-    delete calculator;
-    for (int i = 0; i < LAST_STRATEGY; i++)
-        delete strategyCalc[i];
-
 }
 
 int FileExplorerModel::rowCount(const QModelIndex &parent) const {
@@ -72,41 +65,15 @@ QVariant FileExplorerModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void FileExplorerModel::setNewPath(const QString& newPath) {
-    path = newPath;
-}
-
-void FileExplorerModel::updateModel() {
-    sizeMap = calculator->calculate(path);
+void FileExplorerModel::updateModel(QMap<QString, qint64> map) {
+    sizeMap = map;
     qDebug() << sizeMap;
 
     size = 0;
     foreach (const qint64 value, sizeMap.values())
         size += value;
-    // выделение типов в группу other
-    if (strategy == TYPE_SIZE && sizeMap.count() > 1) { // проверяем стратегию
-        qint64 otherSize = 0;
-        QStringList otherKey; // лист для ключей на удаление
-        foreach (const QString& key, sizeMap.keys()) {
-            if (sizeMap.find(key).value() == 0 || (sizeMap.find(key).value() * 100000 / size) < 10) { // условие для other
-                otherSize += sizeMap.find(key).value();
-                otherKey.append(key); // добавляем ключь на удаление
-            }
-        }
-        if (otherSize > 0 && otherKey.count() > 1) { // если есть больше одного ключа в категории other
-            foreach (const QString& key, otherKey) // удаление всех ключей из категории other
-                sizeMap.remove(key);
-            sizeMap.insert("other", otherSize);
-        }
-    }
+
 
     emit layoutChanged(); // обновить представление
 }
 
-void FileExplorerModel::selectStrategy(int strategy) {
-    qDebug() << "Strategy changed " << strategy;
-    if (strategy < LAST_STRATEGY && strategy > -1) {
-        calculator->setCalculate(strategyCalc[strategy]);
-        this->strategy = (StrategyType)strategy;
-    }
-}

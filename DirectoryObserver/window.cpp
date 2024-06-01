@@ -3,6 +3,11 @@
 
 Window::Window(QWidget *parent): QWidget{parent}
 {
+    // создание стратегий и контекста
+    strategyCalc[0] = new CalculateFolderSize();
+    strategyCalc[1] = new CalculateTypeSize();
+    context = new CalculatorDirSize(strategyCalc[0]);
+
     tree = new QTreeView(this);
     table = new QTableView(this);
     modelTable = new FileExplorerModel(this);
@@ -50,10 +55,23 @@ Window::Window(QWidget *parent): QWidget{parent}
     table->show();
 
     connect(tree, &QTableView::pressed, this, &Window::userSelectDir);
-    connect(calculateButton, &QPushButton::pressed, modelTable , &FileExplorerModel::updateModel);
-    connect(strategyCB, qOverload<int>(&QComboBox::currentIndexChanged), modelTable, &FileExplorerModel::selectStrategy);
+    connect(calculateButton, &QPushButton::pressed, this , &Window::updateModel);
+    // выбор стратегии
+    connect(strategyCB, qOverload<int>(&QComboBox::currentIndexChanged), this, &Window::selectStratrgy);
+    strategyCalc[0]->attach(modelTable);
+    strategyCalc[1]->attach(modelTable);
+    // подписка на обнавления стратегий
 }
 
 void Window::userSelectDir(const QModelIndex &index){
-    modelTable->setNewPath(modelTree->filePath(index));
+    filePath = modelTree->filePath(index);
+}
+void Window::selectStratrgy(int strategy){
+    if (strategy < LAST_STRATEGY && strategy > -1) {
+        context->setCalculate(strategyCalc[strategy]);
+    }
+}
+
+void Window::updateModel() {
+    context->calculate(filePath);
 }
