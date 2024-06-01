@@ -8,10 +8,18 @@ Window::Window(QWidget *parent): QWidget{parent}
     strategyCalc[1] = new CalculateTypeSize();
     context = new CalculatorDirSize(strategyCalc[0]);
 
-    tree = new QTreeView(this);
+
     table = new QTableView(this);
+    list = new QListView(this);
+    pieView = new QChartView(this);
+    barView = new QChartView(this);
+
     modelTable = new FileExplorerModel(this);
+
+
+    tree = new QTreeView(this);
     modelTree = new QFileSystemModel(this);
+
     topMenuFrame = new QFrame(this);
     calculateButton = new QPushButton("Calculate",this);
     strategyCB = new QComboBox(this);
@@ -20,6 +28,7 @@ Window::Window(QWidget *parent): QWidget{parent}
     modelTree->setRootPath(QDir::homePath());
     tree->setModel(modelTree);
     table->setModel(modelTable);
+    list->setModel(modelTable);
 
     viewDataCB->addItem("Таблица", 0);
     viewDataCB->addItem("Круговая диаграмма", 1);
@@ -35,12 +44,13 @@ Window::Window(QWidget *parent): QWidget{parent}
     map.insert("txt", 10);
     map.insert("doc", 20);
 
-    QChartView *view = new QChartView(sampleChart->createChart(map));
+    pieView->setChart(sampleChart->createChart(map));
 
     QHBoxLayout *hLayout1 = new QHBoxLayout();
     hLayout1->addWidget(tree);
     hLayout1->addWidget(table);
-    hLayout1->addWidget(view);
+    hLayout1->addWidget(list);
+    hLayout1->addWidget(pieView);
 
     QHBoxLayout *hLayout2 = new QHBoxLayout(topMenuFrame);
     hLayout2->addWidget(calculateButton);
@@ -51,16 +61,23 @@ Window::Window(QWidget *parent): QWidget{parent}
     vLayout1->addWidget(topMenuFrame);
     vLayout1->addLayout(hLayout1);
 
+    selectView(TABLE);
     tree->show();
     table->show();
+    list->hide();
+    pieView->hide();
 
     connect(tree, &QTableView::pressed, this, &Window::userSelectDir);
     connect(calculateButton, &QPushButton::pressed, this , &Window::updateModel);
     // выбор стратегии
     connect(strategyCB, qOverload<int>(&QComboBox::currentIndexChanged), this, &Window::selectStratrgy);
+
+
+    /////////////////////////////////////////
+    connect(viewDataCB, qOverload<int>(&QComboBox::currentIndexChanged), this, &Window::selectView);
+    // подписка на обнавления стратегий
     strategyCalc[0]->attach(modelTable);
     strategyCalc[1]->attach(modelTable);
-    // подписка на обнавления стратегий
 }
 
 void Window::userSelectDir(const QModelIndex &index){
@@ -69,6 +86,36 @@ void Window::userSelectDir(const QModelIndex &index){
 void Window::selectStratrgy(int strategy){
     if (strategy < LAST_STRATEGY && strategy > -1) {
         context->setCalculate(strategyCalc[strategy]);
+    }
+}
+
+void Window::selectView(int viewID){
+    if (viewID < LAST_VIEW && viewID > -1) {
+        table->hide();
+        list->hide();
+        pieView->hide();
+        barView->hide();
+
+        switch (viewID) {
+            case TABLE: {
+                table->show();
+                break;
+            }
+            case LIST:{
+                list->show();
+                break;
+            }
+            case PIECHART: {
+                pieView->show();
+            break;
+            }
+            case BARCHART: {
+                barView->show();
+            break;
+            }
+        default:
+            break;
+        }
     }
 }
 

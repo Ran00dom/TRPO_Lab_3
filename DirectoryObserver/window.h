@@ -1,6 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "adapter.h"
 #include "calculatordirsize.h"
 #include "fileexplorermodel.h"
 #include <QWidget>
@@ -32,12 +33,26 @@ private:
         TYPE_SIZE,
         LAST_STRATEGY
     };
+    enum View
+    {
+        TABLE,
+        LIST,
+        PIECHART,
+        BARCHART,
+        LAST_VIEW
+    };
+
+    QTableView *table;
+    QListView *list;
+    QChartView *pieView;
+    QChartView *barView;
 
     FileExplorerModel *modelTable;
-    QFileSystemModel *modelTree;
+    SampleChartAdapter *modelChart;
 
+
+    QFileSystemModel *modelTree;
     QTreeView *tree;
-    QTableView *table;
 
     QPushButton* calculateButton;
     QFrame* topMenuFrame;
@@ -53,6 +68,7 @@ private:
 public slots:
     void userSelectDir(const QModelIndex &index);
     void selectStratrgy(int strategy);
+    void selectView(int viewID);
 };
 
 #endif // WINDOW_H
