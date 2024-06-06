@@ -1,4 +1,5 @@
 #include "window.h"
+#include "qglobal.h"
 #include "samplechart.h"
 
 Window::Window(QWidget *parent): QWidget{parent}
@@ -8,15 +9,28 @@ Window::Window(QWidget *parent): QWidget{parent}
     strategyCalc[1] = new CalculateTypeSize();
     context = new CalculatorDirSize(strategyCalc[0]);
 
+    models.append(new FileExplorerModel(this));
+    models.append(new FileExplorerModel(this));
+    models.append(new SampleChartModelAdapter(new BarChart(),this));
+    models.append(new SampleChartModelAdapter(new PieChart(),this));
 
+
+    foreach (FileExplorerModel* model, models) {
+        model->createView();
+        views.append(model->getView());
+        strategyCalc[0]->attach(model);
+        strategyCalc[1]->attach(model);
+    }
+
+    /*
     table = new QTableView(this);
     list = new QListView(this);
     pieView = new QChartView(this);
     barView = new QChartView(this);
     QAbstractScrollArea *adf = new QAbstractScrollArea();
+    */
 
-
-    modelTable = new FileExplorerModel(this);
+    //modelTable = new FileExplorerModel(this);
 
 
     tree = new QTreeView(this);
@@ -29,8 +43,8 @@ Window::Window(QWidget *parent): QWidget{parent}
 
     modelTree->setRootPath(QDir::homePath());
     tree->setModel(modelTree);
-    table->setModel(modelTable);
-    list->setModel(modelTable);
+    //table->setModel(modelTable);
+    //list->setModel(modelTable);
 
     viewDataCB->addItem("Table", 0);
     viewDataCB->addItem("List", 1);
@@ -42,18 +56,17 @@ Window::Window(QWidget *parent): QWidget{parent}
     topMenuFrame->setFrameShadow(QFrame::Raised);
     topMenuFrame->setFrameShape(QFrame::Panel);
 
-    SampleChart* sampleChart = new BarChart();
-    QMap<QString, qint64> map;
-    map.insert("txt", 10);
-    map.insert("doc", 20);
-
-    pieView->setChart(sampleChart->createChart(map));
 
     QHBoxLayout *hLayout1 = new QHBoxLayout();
+
     hLayout1->addWidget(tree);
-    hLayout1->addWidget(table);
-    hLayout1->addWidget(list);
-    hLayout1->addWidget(pieView);
+    foreach (QAbstractScrollArea* view, views) {
+        hLayout1->addWidget(view);
+    }
+
+    //hLayout1->addWidget(table);
+    //hLayout1->addWidget(list);
+    //hLayout1->addWidget(pieView);
 
     QHBoxLayout *hLayout2 = new QHBoxLayout(topMenuFrame);
     hLayout2->addWidget(calculateButton);
@@ -66,9 +79,6 @@ Window::Window(QWidget *parent): QWidget{parent}
 
     selectView(TABLE);
     tree->show();
-    table->show();
-    list->hide();
-    pieView->hide();
 
     connect(tree, &QTableView::pressed, this, &Window::userSelectDir);
     connect(calculateButton, &QPushButton::pressed, this , &Window::updateModel);
@@ -79,8 +89,6 @@ Window::Window(QWidget *parent): QWidget{parent}
     /////////////////////////////////////////
     connect(viewDataCB, qOverload<int>(&QComboBox::currentIndexChanged), this, &Window::selectView);
     // подписка на обнавления стратегий
-    strategyCalc[0]->attach(modelTable);
-    strategyCalc[1]->attach(modelTable);
 }
 
 void Window::userSelectDir(const QModelIndex &index){
@@ -94,31 +102,11 @@ void Window::selectStratrgy(int strategy){
 
 void Window::selectView(int viewID){
     if (viewID < LAST_VIEW && viewID > -1) {
-        table->hide();
-        list->hide();
-        pieView->hide();
-        barView->hide();
-
-        switch (viewID) {
-            case TABLE: {
-                table->show();
-                break;
-            }
-            case LIST:{
-                list->show();
-                break;
-            }
-            case PIECHART: {
-                pieView->show();
-            break;
-            }
-            case BARCHART: {
-                barView->show();
-            break;
-            }
-        default:
-            break;
+        foreach (QAbstractScrollArea* view, views) {
+            view->hide();
         }
+
+        views.at(viewID)->show();
     }
 }
 

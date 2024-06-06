@@ -27,8 +27,6 @@ public:
     virtual QMap<QString, qint64> calculate(QString directory, QString mapCatalog, int level);
 };
 
-
-
 class CalculateFolderSize : public CalculateDirectory
 {
 public:
