@@ -17,6 +17,8 @@ void PieChart::createSeries(QtCharts::QChart* chart, QMap<QString, qint64>& data
         QPieSlice* slice = new QPieSlice(series);
         slice->setLabel(key);
         slice->setValue(data.find(key).value());
+        slice->setBorderWidth(0);
+        slice->setColor(QColor::fromRgb(qrand() % 255,qrand() % 255, qrand() % 255));
         series->append(slice);
     }
     chart->addSeries(series);

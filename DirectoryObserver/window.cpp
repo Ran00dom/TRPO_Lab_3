@@ -49,8 +49,8 @@ Window::Window(QWidget *parent): QWidget{parent}
 
     viewDataCB->addItem("Table", 0);
     viewDataCB->addItem("List", 1);
-    viewDataCB->addItem("Pic", 2);
-    viewDataCB->addItem("Bar", 3);
+    viewDataCB->addItem("Bar", 2);
+    viewDataCB->addItem("Pie", 3);
 
     strategyCB->addItem("Directory Size", 0);
     strategyCB->addItem("File Type Size", 1);
