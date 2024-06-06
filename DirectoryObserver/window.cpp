@@ -10,7 +10,7 @@ Window::Window(QWidget *parent): QWidget{parent}
     context = new CalculatorDirSize(strategyCalc[0]);
 
     models.append(new FileExplorerModel(this));
-    models.append(new FileExplorerModel(this));
+    models.append(new FileExplorerListModel(this));
     models.append(new SampleChartModelAdapter(new BarChart(),this));
     models.append(new SampleChartModelAdapter(new PieChart(),this));
 
@@ -18,6 +18,7 @@ Window::Window(QWidget *parent): QWidget{parent}
     foreach (FileExplorerModel* model, models) {
         model->createView();
         views.append(model->getView());
+        model->getView()->setParent(this);
         strategyCalc[0]->attach(model);
         strategyCalc[1]->attach(model);
     }

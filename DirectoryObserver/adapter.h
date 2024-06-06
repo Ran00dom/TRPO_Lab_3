@@ -16,11 +16,12 @@ private:
     QChart* chart;
     QChartView* viewChart;
 };
-/*
+
 class FileExplorerListModel : public FileExplorerModel
 {
+public:
     FileExplorerListModel(QObject* parent = nullptr);
-
+    void createView();
 };
-*/
+
 #endif // ADAPTER_H
