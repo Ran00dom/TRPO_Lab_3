@@ -13,6 +13,8 @@ Window::Window(QWidget *parent): QWidget{parent}
     list = new QListView(this);
     pieView = new QChartView(this);
     barView = new QChartView(this);
+    QAbstractScrollArea *adf = new QAbstractScrollArea();
+
 
     modelTable = new FileExplorerModel(this);
 
@@ -30,9 +32,10 @@ Window::Window(QWidget *parent): QWidget{parent}
     table->setModel(modelTable);
     list->setModel(modelTable);
 
-    viewDataCB->addItem("Таблица", 0);
-    viewDataCB->addItem("Круговая диаграмма", 1);
-    viewDataCB->addItem("Гистограмма", 2);
+    viewDataCB->addItem("Table", 0);
+    viewDataCB->addItem("List", 1);
+    viewDataCB->addItem("Pic", 2);
+    viewDataCB->addItem("Bar", 3);
 
     strategyCB->addItem("Directory Size", 0);
     strategyCB->addItem("File Type Size", 1);

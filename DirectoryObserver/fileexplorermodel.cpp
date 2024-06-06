@@ -1,8 +1,10 @@
 #include "fileexplorermodel.h"
 #include "qdebug.h"
+#include "qtableview.h"
 #include <cmath>
 
 FileExplorerModel::FileExplorerModel(QObject* parent):QAbstractTableModel(parent),sizeMap(QMap<QString,qint64>()) {
+
 }
 
 FileExplorerModel::~FileExplorerModel(){
@@ -77,3 +79,12 @@ void FileExplorerModel::updateModel(QMap<QString, qint64> map) {
     emit layoutChanged(); // обновить представление
 }
 
+void FileExplorerModel::createView() {
+    QTableView* table = new QTableView();
+    table->setModel(this);
+    view = table;
+}
+
+QAbstractScrollArea* FileExplorerModel::getView() {
+    return view;
+}

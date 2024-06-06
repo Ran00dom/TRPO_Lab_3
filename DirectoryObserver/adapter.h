@@ -2,15 +2,19 @@
 #define ADAPTER_H
 #include "fileexplorermodel.h"
 #include "samplechart.h"
+#include <QChart>
 
-class SampleChartAdapter : public FileExplorerModel
+class SampleChartModelAdapter : public FileExplorerModel
 {
 public:
-    SampleChartAdapter(QObject* parent = nullptr);
-    ~SampleChartAdapter();
-
+    SampleChartModelAdapter(SampleChart* _sample, QObject* parent = nullptr);
+    ~SampleChartModelAdapter();
+    void createView();
+    void updateModel(QMap<QString, qint64>);
 private:
     SampleChart* sample;
+    QChart* chart;
+    QChartView* viewChart;
 };
 
 #endif // ADAPTER_H

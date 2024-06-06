@@ -48,8 +48,9 @@ private:
     QChartView *barView;
 
     FileExplorerModel *modelTable;
-    SampleChartAdapter *modelChart;
+    SampleChartModelAdapter *modelChart;
 
+    QVector<QAbstractScrollArea*> views;
 
     QFileSystemModel *modelTree;
     QTreeView *tree;
