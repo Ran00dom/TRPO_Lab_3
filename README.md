@@ -7,7 +7,7 @@
 
 
 ## UML-диаграмма
-![Иллюстрация к проекту](https://github.com/Ran00dom/TRPO_Lab_3/raw//task_description/UML.v3.png)
+![Иллюстрация к проекту](https://github.com/Ran00dom/TRPO_Lab_3/raw//task_description/UML.v4.png)
 
 Система сборки: Qmake
 

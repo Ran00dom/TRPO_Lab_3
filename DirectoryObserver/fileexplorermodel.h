@@ -1,7 +1,7 @@
 #ifndef FILEEXPLORERMODEL_H
 #define FILEEXPLORERMODEL_H
 
-#include "calculatordirsize.h"
+#include "qabstractscrollarea.h"
 #include <QFileSystemModel>
 
 class FileExplorerModel : public QAbstractTableModel
@@ -12,14 +12,15 @@ public:
     ~FileExplorerModel();
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    void setNewPath(const QString& newPath);
-public slots:
-    void updateModel();
-    void selectStrategy(int strategy);
+    QAbstractScrollArea* getView();
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual void createView();
 
-private:
+public slots:
+    virtual void updateModel(QMap<QString, qint64>);
+
+protected:
     enum HeaderName
     {
         NAME = 0,
@@ -27,18 +28,10 @@ private:
         PERCENT,
         LAST_HEAD
     };
-    enum StrategyType
-    {
-        DIR_SIZE = 0,
-        TYPE_SIZE,
-        LAST_STRATEGY
-    };
-    QMap<QString, qint64> sizeMap;
-    CalculatorDirSize* calculator;
-    CalculateDirectory* strategyCalc[LAST_STRATEGY];
-    StrategyType strategy;
+
     qint64 size;
-    QString path;
+    QMap<QString, qint64> sizeMap;
+    QAbstractScrollArea * view;
 };
 
 #endif // FILEEXPLORERMODEL_H
